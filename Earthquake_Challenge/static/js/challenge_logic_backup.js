@@ -8,6 +8,7 @@ attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap
     accessToken: API_KEY
 });
 
+
 // We create the satelite view tile layer that will be an option for our map.
 let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -21,15 +22,17 @@ let baseMaps = {
   Satelite: satelliteStreets
 };
 
-// Create the earthquake layer for our map.
-//let allEarthquakes, tectonicPlates = new L.layerGroup();
-let allEarthquakes = new L.layerGroup();
-let tectonicPlates = new L.layerGroup();
+// 3. Use d3.json to make a call to get our Tectonic Plate geoJSON data.
+let tectonicPlates = "https://github.com/fraxen/tectonicplates/GeoJSON/PB2002_boundaries.json";
 
-// We define an object that contains the overlays.
-// This overlay will be visible all the time.
+
+// 1. Add a 2nd layer group for the tectonic plate data.
+let allEarthquakes, tectonicPlates = new L.LayerGroup();
+//let allEarthquakes = new L.LayerGroup();
+
+// 2. Add a reference to the tectonic plates group to the overlays object.
 let overlays = {
-  Earthquakes: allEarthquakes,
+  "Earthquakes": allEarthquakes,
   "Tectonic Plates": tectonicPlates
 };
 
@@ -95,6 +98,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   L.geoJson(data, {
     // We turn each feature into a circleMarker on the map.
     pointToLayer: function(feature, latlng) {
+                //console.log(data);
                 return L.circleMarker(latlng);
             },
           // We set the style for each circleMarker using our styleInfo function.
@@ -133,12 +137,6 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     return div;
   };
 
-  // 3. Use d3.json to make a call to get our Tectonic Plate geoJSON data.
-  let tectonicPlates = "https://github.com/fraxen/tectonicplates/GeoJSON/PB2002_boundaries.json";
-
-  // Accessing the Toronto neighborhoods GeoJSON URL.
-  //let torontoHoods = "https://raw.githubusercontent.com/vflopez77/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json";
-
   // Create a style for the lines.
   let myStyle = {
     color: "red",
@@ -146,17 +144,16 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   }
 
   // Grabbing our GeoJSON data.
-  d3.json(tectonicPlates).then(function(data) {
-    console.log(data);
+  d3.json(tectonicPlates).then(function(tectonicdata) {
+    console.log(tectonicdata);
 
   // Creating a GeoJSON layer with the retrieved data.
-  L.geoJson(data, {
+  L.geoJson(tectonicdata, {
     style: myStyle,
     // onEachFeature: function(feature, layer) {
     //   layer.bindPopup(feature.properties.AREA_NAME)
     //   }
     }).addTo(map);
-
 
   legend.addTo(map);
 
