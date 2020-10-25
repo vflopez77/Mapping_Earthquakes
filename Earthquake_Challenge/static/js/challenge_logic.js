@@ -22,7 +22,6 @@ let baseMaps = {
 };
 
 // Create the earthquake layer for our map.
-//let allEarthquakes, tectonicPlates = new L.layerGroup();
 let allEarthquakes = new L.layerGroup();
 let tectonicPlates = new L.layerGroup();
 
@@ -125,27 +124,18 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     ];
     // Looping through our intervals to generate a label with a colored square for each interval.
     for (var i = 0; i < magnitudes.length; i++) {
-      console.log(colors[i]);
       div.innerHTML +=
         "<i style='background: " + colors[i] + "'></i> " +
         magnitudes[i] + (magnitudes[i + 1] ? "&ndash;" + magnitudes[i + 1] + "<br>" : "+");
     }
     return div;
   };
+  legend.addTo(map);
 
-  // 3. Use d3.json to make a call to get our Tectonic Plate geoJSON data.
-  //let tectonicPlates = "static/PB2002_boundaries.json";
-  // let tectonicPlates = "https://github.com/fraxen/tectonicplates/blob/master/GeoJSON/PB2002_boundaries.json"
-  let tectonicPlates = await fetch(
-    "https://github.com/fraxen/tectonicplates/blob/master/GeoJSON/PB2002_boundaries.json", 
-    {
-      headers: {
-        authorization: "token 51372408a2fd68f40a7711a3bf1dd66f647b1701"
-      }
-    }
-  )
-  console.log(await response.json());
+});
 
+// 3. Use d3.json to make a call to get our Tectonic Plate geoJSON data.
+d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").then(function(data) {
 
   // Create a style for the lines.
   let myStyle = {
@@ -153,20 +143,15 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     weight: 3
   }
 
-  // Grabbing our GeoJSON data.
-  d3.json(tectonicPlates).then(function(data) {
-    console.log(data);
-
   // Creating a GeoJSON layer with the retrieved data.
   L.geoJson(data, {
     style: myStyle,
     // onEachFeature: function(feature, layer) {
     //   layer.bindPopup(feature.properties.AREA_NAME)
     //   }
-    }).addTo(map);
+    }).addTo(tectonicPlates);
 
-
-  legend.addTo(map);
-
-  });
+  tectonicPlates.addTo(map);
+  
 });
+
