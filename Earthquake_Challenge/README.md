@@ -12,4 +12,6 @@ Overlayed on any of 3 map styles (Streets, Satellite, and Dark) the user can cho
 
 The user can choose which of these three to view, in any combination.
 
-The magnitudes of the earthquakes are highlighted by the size and color of the circular markers, and the user can see the exact magnitude and location of each earthquake by clicking on the its marker.
+The magnitudes of the earthquakes are highlighted by the size and color of the circular markers
+
+The user can see the exact magnitude and location of each earthquake by clicking on the its marker.
