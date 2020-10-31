@@ -192,7 +192,10 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
     return magnitude * 4;
   }
 
-  // This function determines the color of the circle based on the magnitude of the major earthquake.
+  // This function determines the color of the circle based on the magnitude of the earthquake.
+  // Colors changed to match legend
+=======
+
   function getColor(magnitude) {
     if (magnitude > 5) {
       return "#ea2c2c";
